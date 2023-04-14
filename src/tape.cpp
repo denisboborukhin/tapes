@@ -6,24 +6,32 @@
 
 namespace tape_space {
 
-Tape::Tape(const std::string &data_file_name, const std::string &config_file_name)
-    : data_file_name_ {data_file_name}, position_ {0}
+Tape::Tape(const std::string &data_file_name)
+    : position_ {0}
 {
-    FILE *data_stream = fopen(data_file_name_.c_str(), "rb");
-    if (!data_stream) {
-        std::cout << "incorrect file name: " << data_file_name_ << std::endl;
-        return;
+    data_stream_ = fopen(data_file_name.c_str(), "rb+");
+    if (!data_stream_) {
+        data_stream_ = fopen(data_file_name.c_str(), "wb+");
     }
 
-    fseek(data_stream, 0, SEEK_END);
-    size_ = ftell(data_stream);
-    fclose(data_stream);
-
-    configurate(config_file_name);
+    fseek(data_stream_, 0, SEEK_END);
+    size_ = ftell(data_stream_);
+    rewind(data_stream_);
+    //fclose(data_stream);
 }
+
+Tape::~Tape()
+{
+    fclose(data_stream_);
+}
+
+int Tape::write_time_ = 0;
+int Tape::read_time_ = 0;
+int Tape::shift_time_ = 0;
 
 int Tape::read() const
 {
+#if 0
     FILE *data_stream = fopen(data_file_name_.c_str(), "rb");
     if (!data_stream) {
         std::cout << "incorrect file name: " << data_file_name_ << std::endl;
@@ -34,39 +42,44 @@ int Tape::read() const
         fclose(data_stream);
         return 0;
     }
+#endif
 
     int value = 0;
-    fread(&value, sizeof(int), 1, data_stream);
+    fread(&value, sizeof(int), 1, data_stream_);
+    fseek(data_stream_, - sizeof(int) , SEEK_CUR);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(read_time_));
 
-    fclose(data_stream);
+    //fclose(data_stream);
     return value;
 }
 
 int Tape::write(const int value)
 {
+#if 0
     FILE *data_stream = fopen(data_file_name_.c_str(), "rb+");
     if (!data_stream) {
-        std::cout << "incorrect file name: " << data_file_name_ << std::endl;
-        return 0;
+        data_stream = fopen(data_file_name_.c_str(), "wb");
     }
 
     fseek(data_stream, position_, SEEK_SET);
+#endif
 
-    fwrite(&value, sizeof(int), 1, data_stream);
+    fwrite(&value, sizeof(int), 1, data_stream_);
+    fseek(data_stream_, - sizeof(int) , SEEK_CUR);
     if (position_ == size_)
         size_ += sizeof(int);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(write_time_));
 
-    fclose(data_stream);
+    //fclose(data_stream);
     return value;
 }
 
 int Tape::next()
 {
     position_ += sizeof(int);
+    fseek(data_stream_, sizeof(int) , SEEK_CUR);
     std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_));
 
     return position_;
@@ -75,6 +88,7 @@ int Tape::next()
 int Tape::prev()
 {
     position_ -= sizeof(int);
+    fseek(data_stream_, - sizeof(int) , SEEK_CUR);
     std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_));
 
     return position_;

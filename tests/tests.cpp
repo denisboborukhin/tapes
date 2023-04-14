@@ -78,7 +78,7 @@ TEST(tape, create_text_from_tape)
 TEST(tape, configurate)
 {
     Tape tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/first_tape.tp"));
-    tape.configurate(PROJECT_DIR_PATH + std::string("/tests/tests_data/config.cfg"));
+    Tape::configurate(PROJECT_DIR_PATH + std::string("/tests/tests_data/config.cfg"));
 
     ASSERT_EQ(tape.read(), 1);
     ASSERT_EQ(tape.position(), 0);

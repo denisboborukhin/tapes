@@ -7,7 +7,9 @@ namespace tape_space {
 
 class Tape final {
 public:
-    Tape(const std::string &data_file_name, const std::string &config_file_name = {});
+    Tape(const std::string &data_file_name);
+
+    ~Tape();
 
     int read() const;
     int write(const int value);
@@ -18,19 +20,20 @@ public:
     int size() const;
     int position() const;
 
-    void configurate(const std::string &config_file_name);
+    static void configurate(const std::string &config_file_name);
 
     static void fast_create_tape_from_text(const std::string &text_path_name, const std::string &tape_path_name);
     static void fast_create_text_from_tape(const std::string &text_path_name, const std::string &tape_path_name);
 
 private:
-    const std::string data_file_name_;
+    //const std::string data_file_name_;
+    FILE* data_stream_;
     int position_;
     int size_;
 
-    int write_time_ = 0;
-    int read_time_ = 0;
-    int shift_time_ = 0;
+    static int write_time_;
+    static int read_time_;
+    static int shift_time_;
 };
 
 }  // namespace tape_space
