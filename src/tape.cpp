@@ -6,7 +6,8 @@
 
 namespace tape_space {
 
-Tape::Tape(const std::string &data_file_name) : data_file_name_ {data_file_name}, position_ {0}
+Tape::Tape(const std::string &data_file_name, const std::string &config_file_name)
+    : data_file_name_ {data_file_name}, position_ {0}
 {
     FILE *data_stream = fopen(data_file_name_.c_str(), "rb");
     if (!data_stream) {
@@ -17,6 +18,8 @@ Tape::Tape(const std::string &data_file_name) : data_file_name_ {data_file_name}
     fseek(data_stream, 0, SEEK_END);
     size_ = ftell(data_stream);
     fclose(data_stream);
+
+    configurate(config_file_name);
 }
 
 int Tape::read() const
@@ -89,6 +92,9 @@ int Tape::size() const
 
 void Tape::configurate(const std::string &config_file_name)
 {
+    if (config_file_name.empty())
+        return;
+
     std::ifstream config_stream(config_file_name);
 
     config_stream >> write_time_;

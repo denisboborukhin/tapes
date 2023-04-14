@@ -2,8 +2,10 @@
 #include <vector>
 
 #include "tape.hpp"
+#include "tape_sorter.hpp"
 
 using tape_space::Tape;
+using tape_space::Tape_sorter;
 
 int main()
 {
@@ -71,4 +73,29 @@ TEST(tape, create_text_from_tape)
 {
     Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/text_for_create_copy.txt"),
                                      PROJECT_DIR_PATH + std::string("/tests/tests_data/created_tape.tp"));
+}
+
+TEST(tape, configurate)
+{
+    Tape tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/first_tape.tp"));
+    tape.configurate(PROJECT_DIR_PATH + std::string("/tests/tests_data/config.cfg"));
+
+    ASSERT_EQ(tape.read(), 1);
+    ASSERT_EQ(tape.position(), 0);
+    tape.next();
+
+    ASSERT_EQ(tape.read(), 2);
+    ASSERT_EQ(tape.position(), sizeof(int));
+    tape.next();
+
+    ASSERT_EQ(tape.read(), 30);
+    tape.next();
+}
+
+TEST(tape_sorter, constructor)
+{
+    Tape first(PROJECT_DIR_PATH + std::string("/tests/tests_data/first_tape.tp"));
+    Tape second(PROJECT_DIR_PATH + std::string("/tests/tests_data/new_tape.tp"));
+
+    Tape_sorter sorter(first, second);
 }

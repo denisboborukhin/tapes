@@ -1,14 +1,13 @@
 #ifndef TAPE_HPP
 #define TAPE_HPP
 
-#include <vector>
 #include <iostream>
 
 namespace tape_space {
 
 class Tape final {
 public:
-    Tape(const std::string &data_file_name);
+    Tape(const std::string &data_file_name, const std::string &config_file_name = {});
 
     int read() const;
     int write(const int value);

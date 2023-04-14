@@ -1,5 +1,5 @@
 project(teachable_dictionary)
-cmake_minimum_required (VERSION 3.22.1 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.16.2 FATAL_ERROR)
 
 set (PROJECT_NAME tapes)
 
@@ -10,26 +10,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER clang++)
 
 set(TAPE_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+set(SORTER tape_sorter)
 set(TAPE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/tape.cpp)
+set(SORTER_TAPE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/tape_sorter.cpp)
 
 add_definitions(-DPROJECT_DIR_PATH=\"${CMAKE_SOURCE_DIR}\")
 include_directories (include)
-add_library (${PROJECT_NAME} STATIC ${TAPE_SOURCE})
+
+add_library(${PROJECT_NAME} STATIC ${TAPE_SOURCE})
+add_library(${SORTER} STATIC ${SORTER_TAPE_SOURCE})
+target_link_libraries(${SORTER} PUBLIC ${PROJECT_NAME})
 
 add_compile_options(-g -Wall)
 
 #main
-
-#clang-tidy
-option(CLANG_TIDY "Include clang-tidy" OFF)
-find_program(CLANG_TIDY "clang-tidy")
-if(CLANG_TIDY)
-    message (clang-tidy " from " ${CMAKE_SOURCE_DIR}/.clang-tidy)
-    
-    set (CMAKE_CXX_CLANG_TIDY
-        "clang-tidy;-format-style=file:${CMAKE_SOURCE_DIR}/.clang-tidy;-checks=*"
-    )
-endif()
 
 #clang-format
 find_program(CLANG_FORMAT "clang-format")
@@ -53,7 +48,7 @@ if (ADD_SANITIZERS)
 
     add_compile_options (-fsanitize=address -fsanitize=undefined)
     set_target_properties (${PROJECT_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address -fsanitize=undefined")
-    set_target_properties (${PROGRAM_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address -fsanitize=undefined")
+    set_target_properties (${SORTER} PROPERTIES LINK_FLAGS "-fsanitize=address -fsanitize=undefined")
 endif ()
 
 add_subdirectory (tests)
