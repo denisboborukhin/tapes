@@ -12,13 +12,8 @@ set(CMAKE_CXX_COMPILER clang++)
 set(TAPE_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(TAPE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/tape.cpp)
 
-#set(PROGRAM_NAME dictionary_manager)
-#set(MAIN_PROGRAM_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-
-#cmake_path(GET PROJECT_SOURCE_DIR PARENT_PATH PROJECT_PARRENT_PATH)
-
+add_definitions(-DPROJECT_DIR_PATH=\"${CMAKE_SOURCE_DIR}\")
 include_directories (include)
-
 add_library (${PROJECT_NAME} STATIC ${TAPE_SOURCE})
 
 add_compile_options(-g -Wall)
