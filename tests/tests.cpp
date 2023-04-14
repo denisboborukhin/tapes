@@ -52,3 +52,22 @@ TEST(tape, read_write)
     tape.next ();
     ASSERT_EQ (tape.read (), 10);
 }
+
+TEST(tape, create_tape_from_text)
+{
+    Tape::fast_create_tape_from_text(PROJECT_DIR_PATH + std::string("/tests/tests_data/text_for_create.txt"), PROJECT_DIR_PATH + std::string("/tests/tests_data/created_tape.tp"));
+
+    Tape tape (PROJECT_DIR_PATH + std::string("/tests/tests_data/created_tape.tp"));
+
+    for (int i = 0; i != 10; ++i)
+    {
+        ASSERT_EQ (tape.read (), i);
+        tape.next ();
+    }
+    ASSERT_EQ (tape.read (), 100);
+}
+
+TEST(tape, create_text_from_tape)
+{
+    Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/text_for_create_copy.txt"), PROJECT_DIR_PATH + std::string("/tests/tests_data/created_tape.tp"));
+}
