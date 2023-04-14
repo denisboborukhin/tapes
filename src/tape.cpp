@@ -1,5 +1,6 @@
-#include <fstream>
 #include <cstdio>
+#include <thread>
+#include <fstream>
 
 #include "tape.hpp"
 
@@ -34,6 +35,8 @@ int Tape::read() const
     int value = 0;
     fread(&value, sizeof(int), 1, data_stream);
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(read_time_));
+
     fclose(data_stream);
     return value;
 }
@@ -49,6 +52,11 @@ int Tape::write(const int value)
     fseek(data_stream, position_, SEEK_SET);
 
     fwrite(&value, sizeof(int), 1, data_stream);
+    if (position_ == size_)
+        size_ += sizeof(int);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(write_time_));
+
     fclose(data_stream);
     return value;
 }
@@ -56,6 +64,7 @@ int Tape::write(const int value)
 int Tape::next()
 {
     position_ += sizeof(int);
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_));
 
     return position_;
 }
@@ -63,6 +72,7 @@ int Tape::next()
 int Tape::prev()
 {
     position_ -= sizeof(int);
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_));
 
     return position_;
 }
@@ -72,9 +82,20 @@ int Tape::position() const
     return position_;
 }
 
-bool Tape::size() const
+int Tape::size() const
 {
     return size_;
+}
+
+void Tape::configurate(const std::string &config_file_name)
+{
+    std::ifstream config_stream(config_file_name);
+
+    config_stream >> write_time_;
+    config_stream >> read_time_;
+    config_stream >> shift_time_;
+
+    config_stream.close();
 }
 
 void Tape::fast_create_tape_from_text(const std::string &text_path_name, const std::string &tape_path_name)

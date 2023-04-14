@@ -60,7 +60,7 @@ TEST(tape, create_tape_from_text)
 
     Tape tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/created_tape.tp"));
 
-    for (int i = 0; i != 10; ++i) {
+    for (int i = 0, num = tape.size() / sizeof(int) - 1; i != num; ++i) {
         ASSERT_EQ(tape.read(), i);
         tape.next();
     }
