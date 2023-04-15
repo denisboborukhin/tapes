@@ -80,8 +80,7 @@ int Tape::size() const
 
 void Tape::configurate(const std::string &config_file_name)
 {
-    if (config_file_name.empty())
-    {
+    if (config_file_name.empty()) {
         write_time_ = 0;
         read_time_ = 0;
         shift_time_ = 0;

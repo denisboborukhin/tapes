@@ -4,7 +4,7 @@
 
 namespace tape_space {
 
-//static void create_sorted_temp_tapes ();
+// static void create_sorted_temp_tapes ();
 static void sort_last_elem(std::vector<int> &elems);
 static void create_temp_tape(const int index, const std::vector<int> &elems);
 static std::string get_temp_name(const int index);
@@ -36,7 +36,6 @@ int Tape_sorter::sort(Tape &unsorted_tape, Tape &resulted_tape)
     int num_elems_in_last_pack = num_elems - num_elems_in_pack * (num_packs - 1);
     std::vector<int> sort_pack_elems;
     sort_pack_elems.reserve(num_elems_in_last_pack);
-
 
     for (int index = 0; index != num_elems_in_last_pack; ++index) {
         sort_pack_elems.push_back(unsorted_tape.read());
