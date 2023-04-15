@@ -7,13 +7,10 @@ namespace tape_space {
 
 class Tape_sorter final {
 public:
-    Tape_sorter(const Tape &first_tape, Tape &second_tape);
+    int sort(Tape &unsorted_tape, Tape &resulted_tape);
 
-    static const int RAM_LIMIT = 100;
-
-private:
-    const Tape &unsorted_tape_;
-    Tape &resulted_tape_;
+public:
+    static int RAM_LIMIT;
 };
 
 }  // namespace tape_space

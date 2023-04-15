@@ -90,6 +90,8 @@ TEST(tape, configurate)
 
     ASSERT_EQ(tape.read(), 30);
     tape.next();
+
+    Tape::configurate();
 }
 
 TEST(tape_sorter, constructor)
@@ -97,5 +99,7 @@ TEST(tape_sorter, constructor)
     Tape first(PROJECT_DIR_PATH + std::string("/tests/tests_data/first_tape.tp"));
     Tape second(PROJECT_DIR_PATH + std::string("/tests/tests_data/new_tape.tp"));
 
-    Tape_sorter sorter(first, second);
+    Tape_sorter sorter;
+
+    sorter.sort(first, second);
 }
