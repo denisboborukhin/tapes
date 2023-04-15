@@ -8,13 +8,15 @@ namespace tape_space {
 class Tape final {
 public:
     Tape(const std::string &data_file_name);
-    Tape(const Tape &other) = delete;
-    Tape(Tape &&other) = delete;
+    Tape(const Tape &other) = default;
+    Tape(Tape &&other) = default;
 
-    Tape &operator=(const Tape &other) = delete;
-    Tape &operator=(Tape &&other) = delete;
+    Tape &operator=(const Tape &other) = default;
+    Tape &operator=(Tape &&other) = default;
 
-    ~Tape();
+    ~Tape() = default;
+
+    void close ();
 
     int read() const;
     int write(const int value);
@@ -22,8 +24,13 @@ public:
     int next();
     int prev();
 
+    int go_to_begin();
+    int go_to_end(); 
+
     int size() const;
     int position() const;
+
+    bool is_end() const;
 
     static void configurate(const std::string &config_file_name = {});
 

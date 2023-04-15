@@ -22,6 +22,8 @@ TEST(tape, constructors)
     ASSERT_EQ(tape.read(), 1);
     ASSERT_EQ(tape.position(), 0);
     tape.next();
+
+    tape.close();
 }
 
 TEST(tape, read_write)
@@ -53,6 +55,8 @@ TEST(tape, read_write)
 
     tape.next();
     ASSERT_EQ(tape.read(), 10);
+
+    tape.close();
 }
 
 TEST(tape, create_tape_from_text)
@@ -67,6 +71,8 @@ TEST(tape, create_tape_from_text)
         tape.next();
     }
     ASSERT_EQ(tape.read(), 100);
+
+    tape.close();
 }
 
 TEST(tape, create_text_from_tape)
@@ -92,14 +98,23 @@ TEST(tape, configurate)
     tape.next();
 
     Tape::configurate();
+
+    tape.close ();
 }
 
 TEST(tape_sorter, constructor)
 {
-    Tape first(PROJECT_DIR_PATH + std::string("/tests/tests_data/first_tape.tp"));
-    Tape second(PROJECT_DIR_PATH + std::string("/tests/tests_data/new_tape.tp"));
+    Tape::fast_create_tape_from_text(PROJECT_DIR_PATH + std::string("/tests/tests_data/unsorted.txt"),
+                                     PROJECT_DIR_PATH + std::string("/tests/tests_data/unsorted.tp"));
+    Tape first(PROJECT_DIR_PATH + std::string("/tests/tests_data/unsorted.tp"));
+    Tape second(PROJECT_DIR_PATH + std::string("/tests/tests_data/sorted.tp"));
 
     Tape_sorter sorter;
 
     sorter.sort(first, second);
+    Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/sorted.txt"),
+                                     PROJECT_DIR_PATH + std::string("/tests/tests_data/sorted.tp"));
+
+    first.close();
+    second.close();
 }

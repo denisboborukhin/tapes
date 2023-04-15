@@ -18,7 +18,7 @@ Tape::Tape(const std::string &data_file_name) : position_ {0}
     rewind(data_stream_);
 }
 
-Tape::~Tape()
+void Tape::close()
 {
     fclose(data_stream_);
 }
@@ -68,6 +68,24 @@ int Tape::prev()
     return position_;
 }
 
+int Tape::go_to_begin()
+{
+    fseek(data_stream_, 0, SEEK_SET);
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_ * position_ / sizeof(int)));
+
+    position_ = 0;
+    return position_;
+}
+
+int Tape::go_to_end()
+{
+    fseek(data_stream_, 0, SEEK_END);
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_time_ * (size_ - position_) / sizeof(int)));
+
+    position_ = size_;
+    return position_;
+}
+
 int Tape::position() const
 {
     return position_;
@@ -76,6 +94,11 @@ int Tape::position() const
 int Tape::size() const
 {
     return size_;
+}
+
+bool Tape::is_end() const
+{
+    return position_ == size_;
 }
 
 void Tape::configurate(const std::string &config_file_name)
