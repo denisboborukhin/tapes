@@ -99,10 +99,10 @@ TEST(tape, configurate)
 
     Tape::configurate();
 
-    tape.close ();
+    tape.close();
 }
 
-TEST(tape_sorter, constructor)
+TEST(tape_sorter, sort)
 {
     Tape::fast_create_tape_from_text(PROJECT_DIR_PATH + std::string("/tests/tests_data/unsorted.txt"),
                                      PROJECT_DIR_PATH + std::string("/tests/tests_data/unsorted.tp"));
@@ -112,6 +112,7 @@ TEST(tape_sorter, constructor)
     Tape_sorter sorter;
 
     sorter.sort(first, second);
+
     Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("/tests/tests_data/sorted.txt"),
                                      PROJECT_DIR_PATH + std::string("/tests/tests_data/sorted.tp"));
 

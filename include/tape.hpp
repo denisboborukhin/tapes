@@ -16,7 +16,7 @@ public:
 
     ~Tape() = default;
 
-    void close ();
+    void close();
 
     int read() const;
     int write(const int value);
@@ -25,7 +25,7 @@ public:
     int prev();
 
     int go_to_begin();
-    int go_to_end(); 
+    int go_to_end();
 
     int size() const;
     int position() const;
