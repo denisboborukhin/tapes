@@ -1,7 +1,7 @@
 Tape
 ===
-This project is a task on course "Uses and applications of C++ language" by K.I.Vladimirov. The task was to implement a class representing matrix.
-My matrix calculate determinant with partial and full pivoting.
+Tape data is stored as a byte file containing a set of items. 
+To sort tapes with limited memory usage, temporary sorted tapes are created first, and then they are merged into a sorted tape. 
 
 Requirements
 ===
