@@ -104,8 +104,6 @@ TEST(tape, configurate)
 
 TEST(tape_sorter, sort_1)
 {
-    Tape::fast_create_tape_from_text(PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted.txt"),
-                                     PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted.tp"));
     Tape first(PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted.tp"));
     Tape second(PROJECT_DIR_PATH + std::string("tests/tests_data/sorted.tp"));
 
@@ -126,8 +124,6 @@ TEST(tape_sorter, sort_1)
 
 TEST(tape_sorter, sort_2)
 {
-    Tape::fast_create_tape_from_text(PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted2.txt"),
-                                     PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted2.tp"));
     Tape first(PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted2.tp"));
     Tape second(PROJECT_DIR_PATH + std::string("tests/tests_data/sorted2.tp"));
 
@@ -136,6 +132,26 @@ TEST(tape_sorter, sort_2)
 
     Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("tests/tests_data/sorted2.txt"),
                                      PROJECT_DIR_PATH + std::string("tests/tests_data/sorted2.tp"));
+
+    first.close();
+    second.close();
+}
+
+TEST(tape_sorter, sort_3)
+{
+    Tape first(PROJECT_DIR_PATH + std::string("tests/tests_data/unsorted3.tp"));
+    Tape second(PROJECT_DIR_PATH + std::string("tests/tests_data/sorted3.tp"));
+
+    Tape_sorter sorter;
+    sorter.sort(first, second);
+    second.go_to_begin();
+    for (int i = 0, num_elems = second.size() / sizeof(int); i != num_elems; ++i) {
+        ASSERT_EQ(second.read(), i);
+        second.next();
+    }
+
+    Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + std::string("tests/tests_data/sorted3.txt"),
+                                     PROJECT_DIR_PATH + std::string("tests/tests_data/sorted3.tp"));
 
     first.close();
     second.close();

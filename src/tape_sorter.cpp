@@ -10,13 +10,13 @@ static Tape merge_tapes(std::vector<Tape> &sorted_tapes, Tape &resulted_tape, co
 
 static void sort_last_elem_decrease(std::vector<std::pair<int, int>> &elems);
 static void sort_last_elem_increase(std::vector<int> &elems);
-static Tape create_temp_tape(const int index, const std::vector<int> &elems);
+static Tape create_temp_tape(const int index_sorter, const int index, const std::vector<int> &elems);
 
 static void close_tapes(std::vector<Tape> &tapes);
 
-static std::string get_temp_name(const int index);
+static std::string get_temp_name(const int index_sorter, const int index);
 
-int Tape_sorter::RAM_LIMIT = 40;
+int Tape_sorter::RAM_LIMIT = 10;
 
 int Tape_sorter::sort(Tape &unsorted_tape, Tape &resulted_tape)
 {
@@ -41,6 +41,7 @@ std::vector<Tape> create_sorted_temp_tapes(Tape &unsorted_tape, const int ram_li
     std::vector<Tape> sorted_tapes;
     sorted_tapes.reserve(num_packs);
 
+    int index_sorter = rand();
     mkdir((PROJECT_DIR_PATH + std::string("tmp/")).c_str(), 0777);
     for (int index_pack = 0; index_pack != num_packs - 1; ++index_pack) {
         std::vector<int> sort_pack_elems;
@@ -53,7 +54,7 @@ std::vector<Tape> create_sorted_temp_tapes(Tape &unsorted_tape, const int ram_li
             sort_last_elem_increase(sort_pack_elems);
         }
 
-        Tape temp_tape = create_temp_tape(index_pack + 1, sort_pack_elems);
+        Tape temp_tape = create_temp_tape(index_sorter, index_pack + 1, sort_pack_elems);
         sorted_tapes.push_back(temp_tape);
     }
 
@@ -68,7 +69,7 @@ std::vector<Tape> create_sorted_temp_tapes(Tape &unsorted_tape, const int ram_li
         sort_last_elem_increase(sort_pack_elems);
     }
 
-    Tape temp_tape = create_temp_tape(num_packs, sort_pack_elems);
+    Tape temp_tape = create_temp_tape(index_sorter, num_packs, sort_pack_elems);
     sorted_tapes.push_back(temp_tape);
 
     return sorted_tapes;
@@ -141,9 +142,9 @@ void sort_last_elem_increase(std::vector<int> &elems)
     }
 }
 
-Tape create_temp_tape(const int index, const std::vector<int> &elems)
+Tape create_temp_tape(const int index_sorter, const int index, const std::vector<int> &elems)
 {
-    std::string tape_name = get_temp_name(index);
+    std::string tape_name = get_temp_name(index_sorter, index);
     Tape temp_tape(tape_name);
 
     for (auto elem : elems) {
@@ -164,10 +165,10 @@ void close_tapes(std::vector<Tape> &tapes)
     }
 }
 
-std::string get_temp_name(const int index)
+std::string get_temp_name(const int index_sorter, const int index)
 {
-    return PROJECT_DIR_PATH + std::string("/tmp/temp_tape_") + std::to_string(rand()) + "_" + std::to_string(index) +
-           std::string(".tp");
+    return PROJECT_DIR_PATH + std::string("/tmp/temp_tape_") + std::to_string(index) + "_" +
+           std::to_string(index_sorter) + std::string(".tp");
 }
 
 }  // namespace tape_space
