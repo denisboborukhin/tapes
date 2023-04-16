@@ -1,6 +1,8 @@
 Tape
 ===
-Tape data is stored as a byte file containing a set of items. 
+Tape data is stored as a byte file containing a set of items.
+
+
 To sort tapes with limited memory usage, temporary sorted tapes are created first, and then they are merged into a sorted tape. 
 
 Requirements
