@@ -26,12 +26,12 @@ target_link_libraries(${SORTER} PUBLIC ${PROJECT_NAME})
 add_compile_options(-g -Wall)
 
 #main
-add_executable(sort_tape ${MAIN_SOURCE})
-target_link_libraries (sort_tape PRIVATE ${PROJECT_NAME} ${SORTER})
-add_custom_target (run_sort_tape 
-    COMMAND ./sort_tape
+add_executable(sort_tapes ${MAIN_SOURCE})
+target_link_libraries (sort_tapes PRIVATE ${PROJECT_NAME} ${SORTER})
+add_custom_target (run_sort_tapes 
+    COMMAND ./sort_tapes
 )
-add_dependencies (run_sort_tape sort_tape)
+add_dependencies (run_sort_tapes sort_tapes)
 
 #clang-format
 find_program(CLANG_FORMAT "clang-format")
