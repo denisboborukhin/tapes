@@ -14,8 +14,9 @@ set(TAPE_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SORTER tape_sorter)
 set(TAPE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/tape.cpp)
 set(SORTER_TAPE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/tape_sorter.cpp)
+set(MAIN_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
-add_definitions(-DPROJECT_DIR_PATH=\"${CMAKE_SOURCE_DIR}\")
+add_definitions(-DPROJECT_DIR_PATH=\"${CMAKE_SOURCE_DIR}\""/")
 include_directories (include)
 
 add_library(${PROJECT_NAME} STATIC ${TAPE_SOURCE})
@@ -25,6 +26,12 @@ target_link_libraries(${SORTER} PUBLIC ${PROJECT_NAME})
 add_compile_options(-g -Wall)
 
 #main
+add_executable(sort_tape ${MAIN_SOURCE})
+target_link_libraries (sort_tape PRIVATE ${PROJECT_NAME} ${SORTER})
+add_custom_target (run_sort_tape 
+    COMMAND ./sort_tape
+)
+add_dependencies (run_sort_tape sort_tape)
 
 #clang-format
 find_program(CLANG_FORMAT "clang-format")

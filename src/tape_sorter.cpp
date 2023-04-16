@@ -41,7 +41,7 @@ std::vector<Tape> create_sorted_temp_tapes(Tape &unsorted_tape, const int ram_li
     std::vector<Tape> sorted_tapes;
     sorted_tapes.reserve(num_packs);
 
-    mkdir((PROJECT_DIR_PATH + std::string("/tmp/")).c_str(), 0777);
+    mkdir((PROJECT_DIR_PATH + std::string("tmp/")).c_str(), 0777);
     for (int index_pack = 0; index_pack != num_packs - 1; ++index_pack) {
         std::vector<int> sort_pack_elems;
         sort_pack_elems.reserve(num_elems_in_pack);
@@ -116,7 +116,7 @@ void sort_last_elem_decrease(std::vector<std::pair<int, int>> &elems)
     if (elems.size() < 2)
         return;
 
-    for (auto it = elems.rbegin(), end_it = elems.rend(); it != end_it; ++it) {
+    for (auto it = elems.rbegin(), end_it = elems.rend() - 1; it != end_it; ++it) {
         auto &elem = *it;
         auto &next_elem = *(it + 1);
         if (elem.first <= next_elem.first)
@@ -131,7 +131,7 @@ void sort_last_elem_increase(std::vector<int> &elems)
     if (elems.size() < 2)
         return;
 
-    for (auto it = elems.rbegin(), end_it = elems.rend(); it != end_it; ++it) {
+    for (auto it = elems.rbegin(), end_it = elems.rend() - 1; it != end_it; ++it) {
         int &elem = *it;
         int &next_elem = *(it + 1);
         if (elem >= next_elem)
@@ -143,14 +143,15 @@ void sort_last_elem_increase(std::vector<int> &elems)
 
 Tape create_temp_tape(const int index, const std::vector<int> &elems)
 {
-    Tape temp_tape(get_temp_name(index));
+    std::string tape_name = get_temp_name(index);
+    Tape temp_tape(tape_name);
 
     for (auto elem : elems) {
         temp_tape.write(elem);
         temp_tape.next();
     }
 
-    Tape::fast_create_text_from_tape(get_temp_name(index) + ".txt", get_temp_name(index));
+    Tape::fast_create_text_from_tape(tape_name + ".txt", tape_name);
     temp_tape.go_to_begin();
 
     return temp_tape;
@@ -165,7 +166,8 @@ void close_tapes(std::vector<Tape> &tapes)
 
 std::string get_temp_name(const int index)
 {
-    return PROJECT_DIR_PATH + std::string("/tmp/temp_tape_") + std::to_string(index) + std::string(".tp");
+    return PROJECT_DIR_PATH + std::string("/tmp/temp_tape_") + std::to_string(rand()) + "_" + std::to_string(index) +
+           std::string(".tp");
 }
 
 }  // namespace tape_space
