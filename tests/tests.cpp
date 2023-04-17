@@ -22,6 +22,7 @@ TEST(tape, constructors)
     ASSERT_EQ(tape.read(), 1);
     ASSERT_EQ(tape.position(), 0);
     tape.next();
+    ASSERT_EQ(tape.position(), sizeof(int));
 
     tape.close();
 }

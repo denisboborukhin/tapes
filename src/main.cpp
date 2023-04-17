@@ -16,6 +16,9 @@ int main(int argc, char **argv)
 
     Tape_sorter sorter;
     sorter.sort(unsorted_tape, resulted_tape);
+    Tape::fast_create_text_from_tape(PROJECT_DIR_PATH + name_resulted_tape + ".txt", PROJECT_DIR_PATH + name_resulted_tape);
 
+    unsorted_tape.close();
+    resulted_tape.close();
     return 0;
 }
